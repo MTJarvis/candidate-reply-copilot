@@ -4,7 +4,7 @@ An AI-powered application built on Cloudflare for the optional candidate assignm
 
 A talent-acquisition leader pastes an email they received — from a candidate, a hiring manager, or a recruiter — and the app drafts the reply in their voice. The draft is then refined conversationally ("warmer", "offer Thursday instead", "shorter") until it's ready to copy out. The app is a port of an email assistant I originally built to run my own inbox (Node/Express + IMAP + the Anthropic API), re-architected for Cloudflare's platform.
 
-Live: `https://candidate-reply-copilot.<subdomain>.workers.dev`
+Live: `https://candidate-reply-copilot.mtjarvis.workers.dev`
 
 ## Required components → where they live
 
