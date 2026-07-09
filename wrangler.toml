@@ -1,0 +1,25 @@
+name = "candidate-reply-copilot"
+main = "src/index.js"
+compatibility_date = "2026-07-08"
+
+# Static chat UI served from /public at the site root.
+# The binding lets the Worker defer to assets via env.ASSETS.fetch().
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# Workers AI binding (Llama 3.3 — Cloudflare's recommended LLM)
+[ai]
+binding = "AI"
+
+# KV namespace for profile + conversation memory.
+# After running:  wrangler kv namespace create COPILOT_KV
+# paste the generated id below in place of 0918ba0e46de432baaba2ac2817e383d
+[[kv_namespaces]]
+binding = "COPILOT_KV"
+id = "0918ba0e46de432baaba2ac2817e383d"
+
+# Optional external LLM (Claude). Set with:
+#   wrangler secret put CLAUDE_API_KEY
+# If the secret exists, the Worker uses Claude; otherwise Workers AI Llama 3.3.
+# Never put the key value in this file.
