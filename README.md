@@ -1,18 +1,18 @@
 # Candidate Reply Copilot
 
-An AI-powered application built on Cloudflare for the optional candidate assignment.
+Paste an email from a candidate, a hiring manager, or a recruiter, and this drafts the reply in your voice.
 
-A talent-acquisition leader pastes an email they received — from a candidate, a hiring manager, or a recruiter — and the app drafts the reply in their voice. The draft is then refined conversationally ("warmer", "offer Thursday instead", "shorter") until it's ready to copy out. The app is a port of an email assistant I originally built to run my own inbox (Node/Express + IMAP + the Anthropic API), re-architected for Cloudflare's platform.
+Refine it conversationally ("warmer", "offer Thursday instead", "shorter") until it's ready to copy out. The app is a port of an email assistant I originally built to run my own inbox (Node/Express + IMAP + the Anthropic API), re-architected for Cloudflare's platform.
 
-Live: `https://candidate-reply-copilot.mtjarvis.workers.dev`
+Live: https://candidate-reply-copilot.mtjarvis.workers.dev
 
-## Required components → where they live
+## How it is built
 
-| Assignment component | Implementation |
+| Component | Implementation |
 |---|---|
-| **LLM** | Workers AI running **Llama 3.3 70B** (`@cf/meta/llama-3.3-70b-instruct-fp8-fast`) by default. Optionally switches to **Claude** (external LLM) when a `CLAUDE_API_KEY` secret is present — the provider abstraction is in `callLLM()` in `src/index.js`. |
+| **LLM** | Workers AI running **Llama 3.3 70B** (`@cf/meta/llama-3.3-70b-instruct-fp8-fast`) by default. Optionally switches to **Claude** (external LLM) when a `CLAUDE_API_KEY` secret is present, and the provider abstraction is in `callLLM()` in `src/index.js`. |
 | **Workflow / coordination** | A **Cloudflare Worker** (`src/index.js`) orchestrates the full loop: receive input → load profile + conversation memory from KV → build the system prompt → call the LLM → persist updated memory → return the draft. |
-| **User input via chat** | A chat interface served as **static assets on Cloudflare's edge** (`public/index.html`) — paste an email, receive the draft as a letter-styled card, refine in follow-up turns. |
+| **User input via chat** | A chat interface served as **static assets on Cloudflare's edge** (`public/index.html`). Paste an email, receive the draft as a letter-styled card, refine in follow-up turns. |
 | **Memory / state** | **Workers KV**: the user's profile (name, title, tone, signature) under one key, and per-session conversation history under `conv:<sessionId>` with a 7-day TTL, capped at the last 20 turns. Refinements work because each turn is answered with the full prior thread. |
 
 ## Architecture
@@ -52,4 +52,4 @@ No secrets live in this repository.
 
 ## Prompt history
 
-Built with AI-assisted coding throughout, per the assignment note. The full prompt history is in [PROMPTS.md](PROMPTS.md).
+Built with AI-assisted coding throughout. The full prompt history is in [PROMPTS.md](PROMPTS.md).
